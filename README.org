@@ -1,0 +1,36 @@
+* Javascript Text Objects
+
+This package defines text objects that should make your Javascript
+development experience *even more* enjoyable.
+
+This package has text objects defined for:
+
+*** functions
+
+* Install
+
+** [[https://github.com/quelpa/quelpa][Quelpa]]
+
+#+BEGIN_SRC emacs-lisp
+(quelpa '(evil-text-objects-javascript
+          :fetcher github
+          :repo "urbint/evil-text-objects-javascript"))
+#+END_SRC
+
+* Configuration
+
+** Vanilla Elisp
+
+#+BEGIN_SRC emacs-lisp
+(require 'evil-text-objects-javascript)
+(add-hook 'rjsx-mode-hook #'evil-text-objects-javascript/install)
+#+END_SRC
+
+* Keybindings
+
+The following keybindings are assigned. Configuration may be provided
+in the future to support overwrites to reflect personal
+preferences. Please open an issue if you have a compelling reason this
+should be supported.
+
+*** "f" - function
