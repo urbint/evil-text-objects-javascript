@@ -78,6 +78,65 @@
                 (point))))
     (evil-range beg end type)))
 
+;; comments
+(evil-define-text-object
+  evil-outer-javascript-single-line-comment (count &optional beg end type)
+  "Outer text object for a single-line Javascript comment."
+  (let ((beg (save-excursion
+               (re-search-backward "\/\/[[:space:]]*" (line-beginning-position))
+               (when (looking-at "/") (point))))
+        (end (save-excursion
+               (end-of-line)
+               (point))))
+    (evil-range beg end type)))
+
+(evil-define-text-object
+  evil-inner-javascript-single-line-comment (count &optional beg end type)
+  "Inner text object for a single-line Javascript comment."
+  (let ((beg (save-excursion
+               (re-search-backward "\/\/[[:space:]]*" (line-beginning-position))
+               (when (looking-at "/")
+                 (progn
+                   (evil-forward-char 2)
+                   (point)))))
+        (end (save-excursion
+               (end-of-line)
+               (point))))
+    (evil-range beg end type)))
+
+(defun etojs--beg-multi-line-comment ()
+  "Navigate to the beginning of a multi-line Javascript comment."
+  (re-search-backward "\/\\*\\*?"))
+
+(defun etojs--end-multi-line-comment ()
+  "Navigate to the end of a multi-line Javascript comment."
+  (re-search-forward "\*/"))
+
+(evil-define-text-object
+  evil-outer-javascript-multi-line-comment (count &optional beg end type)
+  "Outer text object for a multi-line Javascript comment."
+  (let ((end (save-excursion
+               (etojs--end-multi-line-comment)
+               (point)))
+        (beg (save-excursion
+               (etojs--beg-multi-line-comment)
+               (point))))
+    (evil-range beg end type)))
+
+(evil-define-text-object
+  evil-inner-javascript-multi-line-comment (count &optional beg end type)
+  (let ((end (save-excursion
+               (etojs--end-multi-line-comment)
+               (forward-char -4)
+               (point)))
+        (beg (save-excursion
+               (etojs--beg-multi-line-comment)
+               (evil-next-line)
+               (evil-first-non-blank)
+               (forward-char 2)
+               (point))))
+    (evil-range beg end type)))
+
 ;; Installation Helper
 (defun evil-text-objects-javascript/install ()
   "Register keybindings for the text objects defined herein.  It is
@@ -85,10 +144,18 @@ recommended to run this after something like `rjsx-mode-hook'.  See
 README.md for additional information."
   (bind-keys :map evil-operator-state-local-map
              ("af" . evil-outer-javascript-function)
-             ("if" . evil-inner-javascript-function))
+             ("if" . evil-inner-javascript-function)
+             ("ac" . evil-outer-javascript-single-line-comment)
+             ("ic" . evil-inner-javascript-single-line-comment)
+             ("aC" . evil-outer-javascript-multi-line-comment)
+             ("iC" . evil-inner-javascript-multi-line-comment))
   (bind-keys :map evil-visual-state-local-map
              ("af" . evil-outer-javascript-function)
-             ("if" . evil-inner-javascript-function)))
+             ("if" . evil-inner-javascript-function)
+             ("ac" . evil-outer-javascript-single-line-comment)
+             ("ic" . evil-inner-javascript-single-line-comment)
+             ("aC" . evil-outer-javascript-multi-line-comment)
+             ("iC" . evil-inner-javascript-multi-line-comment)))
 
 (provide 'evil-text-objects-javascript)
 
