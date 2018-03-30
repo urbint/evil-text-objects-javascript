@@ -1,15 +1,37 @@
 * Javascript Text Objects
 
-This package defines text objects that should make your Javascript
-development experience *even more* enjoyable.
+This package defines text objects that should make your Javascript development
+experience *even more* enjoyable.
 
 This package has text objects defined for:
 
 *** functions
+*** single-line comments
+*** multi-line comments
 
-* Install
+** Known limitations
 
-** [[https://github.com/quelpa/quelpa][Quelpa]]
+Each of these text objects is cobbled together using rudimentary regular
+expressions and Evil movement commands. As such, there are a few limitations
+that are known. We hope to address each of these and eventually add test
+coverage to prevent regressions and support TDD, which would be immensely
+helpful during the implementation phase.
+
+*** multi-line comments
+#+BEGIN_SRC rjsx
+// this is supported
+/**
+ * Comment content
+ * goes here
+ */
+
+// this is not
+/** Comment content goes here */
+#+END_SRC
+
+** Install
+
+*** [[https://github.com/quelpa/quelpa][Quelpa]]
 
 #+BEGIN_SRC emacs-lisp
 (quelpa '(evil-text-objects-javascript
@@ -17,20 +39,21 @@ This package has text objects defined for:
           :repo "urbint/evil-text-objects-javascript"))
 #+END_SRC
 
-* Configuration
+** Configuration
 
-** Vanilla Elisp
+*** Vanilla Elisp
 
 #+BEGIN_SRC emacs-lisp
 (require 'evil-text-objects-javascript)
 (add-hook 'rjsx-mode-hook #'evil-text-objects-javascript/install)
 #+END_SRC
 
-* Keybindings
+** Keybindings
 
-The following keybindings are assigned. Configuration may be provided
-in the future to support overwrites to reflect personal
-preferences. Please open an issue if you have a compelling reason this
-should be supported.
+The following keybindings are assigned. Configuration may be provided in the
+future to support overwrites to reflect personal preferences. Please open an
+issue if you have a compelling reason this should be supported.
 
 *** "f" - function
+*** "c" - single-line comment
+*** "C" - multi-line comment
